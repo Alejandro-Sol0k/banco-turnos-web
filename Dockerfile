@@ -1,11 +1,17 @@
-# 1. Usamos una imagen oficial y ligera de Java 21
-FROM eclipse-temurin:24-jre-alpine
-
-# 2. Creamos la carpeta de trabajo en el servidor de Render
+FROM eclipse-temurin:24-jdk-alpine AS build
 WORKDIR /app
-
-# 3. Copiamos todo el contenido de tu repositorio al servidor
 COPY . .
 
-# 4. Ejecutamos tu archivo ejecutable
-CMD ["java", "-jar", "app.jar"]
+# Compila apuntando directo al driver exacto
+RUN javac -d out -cp "postgresql-42.7.8.jar:." src/*.java
+
+FROM eclipse-temurin:24-jre-alpine
+WORKDIR /app
+
+COPY --from=build /app/out ./out
+COPY --from=build /app/web ./web
+# Copiamos únicamente el conector de Postgres
+COPY --from=build /app/postgresql-42.7.8.jar ./ 
+
+# Arranca el servidor con el nombre exacto del driver
+CMD ["java", "-cp", "out:postgresql-42.7.8.jar:.", "BancoApiServer"]
