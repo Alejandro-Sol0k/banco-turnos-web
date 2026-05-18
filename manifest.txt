@@ -1,0 +1,2 @@
+Main-Class: BancoApiServer
+Class-Path: driver/postgresql-42.7.8.jar

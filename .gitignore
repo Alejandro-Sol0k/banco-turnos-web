@@ -1,0 +1,15 @@
+# Ocultar configuraciones de entornos de desarrollo
+.idea/
+.vscode/
+*.iml
+nbproject/
+build/
+dist/
+target/
+
+# Ocultar variables de entorno secretas (Clever Cloud)
+.env
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

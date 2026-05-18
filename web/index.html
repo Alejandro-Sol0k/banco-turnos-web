@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion de Clientes - Banco</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <h1>Gestion de Clientes - Banco</h1>
+      <p>Cola normal y prioridad para adultos mayores</p>
+    </header>
+
+    <main class="content">
+      <section class="card">
+        <h2>Registro de clientes</h2>
+        <form class="form" id="form-registro">
+          <label>
+            Nombre
+            <input id="nombre" type="text" placeholder="Nombre completo" required minlength="2" maxlength="25" />
+          </label>
+          <label>
+            Tipo de documento
+            <select id="tipoDocumento" required>
+              <option value="">Seleccione</option>
+              <option value="CC">CC - Cedula de ciudadania</option>
+              <option value="CE">CE - Cedula de extranjeria</option>
+              <option value="PAS">PAS - Pasaporte</option>
+            </select>
+          </label>
+          <label>
+            Documento
+            <input id="documento" type="number" placeholder="Numero (6-12 digitos)" required min="100000" max="999999999999" />
+          </label>
+          <label>
+            Edad
+            <input id="edad" type="number" placeholder="Edad" min="18" max="120" required />
+          </label>
+          <button type="submit" class="primary">Registrar</button>
+        </form>
+        <p class="notice" id="mensaje"></p>
+      </section>
+
+      <section class="card">
+        <h2>Panel de atencion</h2>
+        <div class="panel">
+          <div>
+            <span class="label">Turno actual</span>
+            <strong id="turnoActual">---</strong>
+          </div>
+          <div>
+            <span class="label">Tipo</span>
+            <strong id="tipoActual">---</strong>
+          </div>
+          <div>
+            <span class="label">Nombre</span>
+            <strong id="nombreActual">---</strong>
+          </div>
+        </div>
+        <button type="button" class="secondary" id="btnAtender">Llamar siguiente</button>
+      </section>
+
+      <section class="card">
+        <h2>Estado de la cola</h2>
+        <div class="stats">
+          <div>
+            <span class="label">Atendidos</span>
+            <strong id="totalAtendidos">0</strong>
+          </div>
+          <div>
+            <span class="label">Pendientes</span>
+            <strong id="totalPendientes">0</strong>
+          </div>
+          <div>
+            <span class="label">Proximo turno</span>
+            <strong id="proximoTurno">---</strong>
+          </div>
+        </div>
+        <h3>Clientes en espera</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Turno</th>
+              <th>Nombre</th>
+              <th>Tipo</th>
+            </tr>
+          </thead>
+          <tbody id="tablaEspera">
+            <tr>
+              <td>---</td>
+              <td>---</td>
+              <td>---</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Historial de turnos</h2>
+        <ul class="history" id="listaHistorial">
+          <li>Sin registros</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
