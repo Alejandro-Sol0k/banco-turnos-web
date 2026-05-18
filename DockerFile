@@ -1,0 +1,11 @@
+# 1. Usamos una imagen oficial y ligera de Java 21
+FROM eclipse-temurin:21-jre-alpine
+
+# 2. Creamos la carpeta de trabajo en el servidor de Render
+WORKDIR /app
+
+# 3. Copiamos todo el contenido de tu repositorio al servidor
+COPY . .
+
+# 4. Ejecutamos tu archivo ejecutable
+CMD ["java", "-jar", "app.jar"]
