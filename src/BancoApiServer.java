@@ -49,6 +49,9 @@ public class BancoApiServer {
     server.createContext("/api/atender", api::handleAtender);
     server.createContext("/api/estado", api::handleEstado);
     server.createContext("/api/cancelar", api::handleCancelar);
+    server.createContext("/api/cola", api::handleCola);
+    server.createContext("/api/historial", api::handleHistorial);
+    server.createContext("/api/actual", api::handleActual);
     server.createContext("/", new StaticHandler());
 
     server.start();
