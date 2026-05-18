@@ -1,5 +1,5 @@
 # 1. Usamos una imagen oficial y ligera de Java 21
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:24-jre-alpine
 
 # 2. Creamos la carpeta de trabajo en el servidor de Render
 WORKDIR /app
