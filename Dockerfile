@@ -3,8 +3,8 @@ WORKDIR /app
 COPY . .
 
 # Compila apuntando directo al driver exacto
-RUN javac -d out -cp "postgresql-42.7.8.jar:." src/*.java
-
+# Reemplaza tu línea actual de RUN javac por esta:
+RUN find . -name "*.java" > sources.txt && javac -d out -cp "postgresql-42.7.8.jar:src/postgresql-42.7.8.jar:." @sources.txt
 FROM eclipse-temurin:24-jre-alpine
 WORKDIR /app
 
