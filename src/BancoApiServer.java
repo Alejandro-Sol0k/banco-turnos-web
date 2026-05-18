@@ -19,44 +19,45 @@ public class BancoApiServer {
     }
 
     public static void main(String[] args) throws IOException {
-    // 1. Cargamos las variables del archivo .env local si existe
-    Map<String, String> env = EnvLoader.load(".env");
-    
-    // 2. ¡EL TRUCO! Si no están en el archivo, las buscamos en el sistema (Para Render)
-    if (!env.containsKey("DB_HOST") && System.getenv("DB_HOST") != null) {
-        env.put("DB_HOST", System.getenv("DB_HOST"));
-        env.put("DB_PORT", System.getenv("DB_PORT"));
-        env.put("DB_NAME", System.getenv("DB_NAME"));
-        env.put("DB_USER", System.getenv("DB_USER"));
-        env.put("DB_PASSWORD", System.getenv("DB_PASSWORD"));
-        env.put("DB_SSL", System.getenv("DB_SSL"));
+        // 1. Cargamos las variables del archivo .env local si existe
+        Map<String, String> env = EnvLoader.load(".env");
+        
+        // 2. ¡EL TRUCO! Si no están en el archivo, las buscamos en el sistema (Para Render)
+        if (!env.containsKey("DB_HOST") && System.getenv("DB_HOST") != null) {
+            env.put("DB_HOST", System.getenv("DB_HOST"));
+            env.put("DB_PORT", System.getenv("DB_PORT"));
+            env.put("DB_NAME", System.getenv("DB_NAME"));
+            env.put("DB_USER", System.getenv("DB_USER"));
+            env.put("DB_PASSWORD", System.getenv("DB_PASSWORD"));
+            env.put("DB_SSL", System.getenv("DB_SSL"));
+        }
+        
+        // Lo mismo para el puerto de la aplicación web
+        if (!env.containsKey("APP_PORT") && System.getenv("APP_PORT") != null) {
+            env.put("APP_PORT", System.getenv("APP_PORT"));
+        }
+
+        DbConfig config = DbConfig.fromEnv(env);
+        BancoRepository repo = new BancoRepository(config);
+        BancoService service = new BancoService(repo);
+
+        int port = Integer.parseInt(env.getOrDefault("APP_PORT", "8080"));
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+        BancoApiServer api = new BancoApiServer(service);
+
+        // Registro único de endpoints del API bancaria
+        server.createContext("/api/registrar", api::handleRegistrar);
+        server.createContext("/api/atender", api::handleAtender);
+        server.createContext("/api/estado", api::handleEstado);
+        server.createContext("/api/cancelar", api::handleCancelar);
+        server.createContext("/api/cola", api::handleCola);
+        server.createContext("/api/historial", api::handleHistorial);
+        server.createContext("/api/actual", api::handleActual);
+        server.createContext("/", new StaticHandler());
+
+        server.start();
+        System.out.println("Servidor bancario interconectado corriendo en el puerto " + port);
     }
-    
-    // Lo mismo para el puerto de la aplicación web
-    if (!env.containsKey("APP_PORT") && System.getenv("APP_PORT") != null) {
-        env.put("APP_PORT", System.getenv("APP_PORT"));
-    }
-
-    DbConfig config = DbConfig.fromEnv(env);
-    BancoRepository repo = new BancoRepository(config);
-    BancoService service = new BancoService(repo);
-
-    int port = Integer.parseInt(env.getOrDefault("APP_PORT", "8080"));
-    HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-    BancoApiServer api = new BancoApiServer(service);
-
-    server.createContext("/api/registrar", api::handleRegistrar);
-    server.createContext("/api/atender", api::handleAtender);
-    server.createContext("/api/estado", api::handleEstado);
-    server.createContext("/api/cancelar", api::handleCancelar);
-    server.createContext("/api/cola", api::handleCola);
-    server.createContext("/api/historial", api::handleHistorial);
-    server.createContext("/api/actual", api::handleActual);
-    server.createContext("/", new StaticHandler());
-
-    server.start();
-    System.out.println("Servidor bancario interconectado corriendo en el puerto " + port);
-}
 
     private void handleRegistrar(HttpExchange exchange) throws IOException {
         if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -215,6 +216,7 @@ public class BancoApiServer {
             String name = file.getFileName().toString();
             if (name.endsWith(".css")) {
                 return "text/css; charset=UTF-8";
+             slowed down;
             }
             if (name.endsWith(".js")) {
                 return "application/javascript; charset=UTF-8";
